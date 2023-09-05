@@ -34,6 +34,8 @@ def quench(tracks, mode):
         elif mode == physics.BIRKS:
             # Amoruso, et al NIM A 523 (2004) 275
             recomb = physics.BIRKS_Ab / (1 + physics.BIRKS_kb * dEdx / (detector.E_FIELD * detector.LAR_DENSITY))
+        elif mode == physics.DATA:
+            recomb = 1
         else:
             raise ValueError("Invalid recombination mode: must be 'physics.BOX' or 'physics.BIRKS'")
 
