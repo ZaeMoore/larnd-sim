@@ -3,10 +3,11 @@ Module to implement the quenching of the ionized electrons
 through the detector
 """
 
-from math import log, isnan
+from math import log, isnan, exp, sqrt
 from numba import cuda
 
 from .consts import detector, physics, light
+from .consts.detector import TPC_BORDERS
 
 @cuda.jit
 def quench(tracks, mode):
