@@ -338,7 +338,7 @@ def run_simulation(input_filename,
     logger.start()
     logger.take_snapshot()
     start_quenching = time()
-    quenching.quench[BPG,TPB](tracks, physics.BIRKS)
+    quenching.quench[BPG,TPB](tracks, physics.DATA)
     end_quenching = time()
     logger.take_snapshot()
     logger.archive('quenching')
