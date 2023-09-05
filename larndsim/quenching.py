@@ -25,6 +25,8 @@ def quench(tracks, mode):
     if itrk < tracks.shape[0]:
         dEdx = tracks[itrk]["dEdx"]
         dE = tracks[itrk]["dE"]
+        track = tracks[itrk]
+        pixel_plane = detector.DEFAULT_PLANE_INDEX
 
         recomb = 0
         if mode == physics.BOX:
@@ -35,7 +37,20 @@ def quench(tracks, mode):
             # Amoruso, et al NIM A 523 (2004) 275
             recomb = physics.BIRKS_Ab / (1 + physics.BIRKS_kb * dEdx / (detector.E_FIELD * detector.LAR_DENSITY))
         elif mode == physics.DATA:
-            recomb = 1
+            for ip, plane in enumerate(TPC_BORDERS):
+                if plane[0][0]-2e-2 <= track["x"] <= plane[0][1]+2e-2 and \
+                   plane[1][0]-2e-2 <= track["y"] <= plane[1][1]+2e-2 and \
+                   min(plane[2][1]-2e-2,plane[2][0]-2e-2) <= track["z"] <= max(plane[2][1]+2e-2,plane[2][0]+2e-2):
+                    pixel_plane = ip
+                    break
+            track["pixel_plane"] = pixel_plane
+
+            if pixel_plane != detector.DEFAULT_PLANE_INDEX:
+                z_anode = TPC_BORDERS[pixel_plane][2][0]
+                drift_distance = abs(track["z"] - z_anode)
+                drift_time = drift_distance / detector.V_DRIFT
+                lifetime_red = exp(drift_time / detector.ELECTRON_LIFETIME) #removed negative to flip to anode->volume
+                recomb = lifetime_red
         else:
             raise ValueError("Invalid recombination mode: must be 'physics.BOX' or 'physics.BIRKS'")
 
