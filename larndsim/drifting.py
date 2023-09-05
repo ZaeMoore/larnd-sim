@@ -46,7 +46,7 @@ def drift(tracks):
             drift_start = abs(min(track["z_start"],track["z_end"]) - z_anode)
             drift_end = abs(max(track["z_start"],track["z_end"]) - z_anode)
             drift_time = drift_distance / detector.V_DRIFT
-            lifetime_red = exp(-drift_time / detector.ELECTRON_LIFETIME)
+            lifetime_red = exp(drift_time / detector.ELECTRON_LIFETIME) #removed negative to flip to anode->volume
 
             track["n_electrons"] *= lifetime_red
 
