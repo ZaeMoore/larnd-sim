@@ -48,7 +48,7 @@ def drift(tracks):
             drift_time = drift_distance / detector.V_DRIFT
             lifetime_red = exp(-drift_time / detector.ELECTRON_LIFETIME) #removed negative to flip to anode->volume
 
-            track["n_electrons"] *= 1 # lifetime_red
+            track["n_electrons"] *= lifetime_red
 
             track["long_diff"] = sqrt(drift_time * 2 * detector.LONG_DIFF)
             track["tran_diff"] = sqrt(drift_time * 2 * detector.TRAN_DIFF)
